@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare(const void *a, const void *b) {
+    int *x = (int *)a;
+    int *y = (int *)b;
+    return x[1] - y[1];
+}
+
+int *maximumEarnings(int n, int jobs[][3]) {
+    qsort(jobs, n, sizeof(jobs[0]), compare);
+    int earnings = 0;
+    int jobsLeft = 1;
+    int end = 0;
+    for (int i = 0; i < n; i++) {
+        if (jobs[i][0] >= end) {
+            earnings += jobs[i][2];
+            end = jobs[i][1];
+        } else {
+            jobsLeft++;
+        }
+    }
+    int *result = (int *)malloc(2 * sizeof(int));
+    result[0] = jobsLeft;
+    result[1] = earnings;
+    return result;
+}
+
+int main() {
+    int n = 3;
+ 
+    int jobs[3][3] = {{900, 1000, 250}, {945, 1200, 550}, {1130, 1500, 150}};
+    int *result = maximumEarnings(n, jobs);
+    printf("The number of tasks and earnings available for others: %d\n", result[0]);
+    printf("earnings: %d\n", result[1]);
+    free(result);
+    return 0;
+}
